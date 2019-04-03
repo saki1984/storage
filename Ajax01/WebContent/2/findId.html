@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>2/findId.html</title>
+<script type="text/javascript">
+	var xhr = null;
+	function findId() {
+		var email = document.getElementById("email").value;
+		xhr = new XMLHttpRequest();
+		xhr.onreadystatechange = success;
+		xhr.open('get', 'findId.jsp?email=' + email, true);
+		xhr.send();
+	}
+	function success() {
+		if (xhr.readyState == 4 && xhr.status == 200) {
+			//alert('success');
+			//조회된 아이디 결과를 div에 출력하기
+			var data = xhr.responseXML;
+			var find = data.getElementsByTagName("find")[0].firstChild.nodeValue;
+			var div = document.getElementById("result");
+			if (find == 'fail') {
+				div.innerHTML = "해당하는 정보가 없습니다.";
+			} else if (find == 'success') {
+				var id = data.getElementsByTagName("id")[0].firstChild.nodeValue;
+				div.innerHTML = "조회된 아이디:" + id;
+			}
+		}
+	}
+</script>
+</head>
+<body>
+	<h1>아이디 찾기</h1>
+	이메일 입력
+	<input type="text" id="email">
+	<input type="button" value="찾기" onclick="findId()">
+	<br>
+	<div id="result"></div>
+</body>
+</html>
